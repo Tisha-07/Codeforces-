@@ -1,0 +1,68 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    static String build(int n, int z, int o, int k, boolean startZero) {
+        int runs = n - k;
+
+        int zr, or;
+        if (startZero) {
+            zr = (runs + 1) / 2;
+            or = runs / 2;
+        } else {
+            or = (runs + 1) / 2;
+            zr = runs / 2;
+        }
+
+        if (z < zr || o < or) return null;
+
+        int[] zLen = new int[zr];
+        int[] oLen = new int[or];
+        Arrays.fill(zLen, 1);
+        Arrays.fill(oLen, 1);
+
+        if (zr > 0) zLen[0] += z - zr;
+        if (or > 0) oLen[0] += o - or;
+
+        StringBuilder sb = new StringBuilder();
+        int zi = 0, oi = 0;
+
+        for (int i = 0; i < runs; i++) {
+            boolean zeroRun = (i % 2 == 0) == startZero;
+            if (zeroRun) {
+                for (int j = 0; j < zLen[zi]; j++) sb.append('0');
+                zi++;
+            } else {
+                for (int j = 0; j < oLen[oi]; j++) sb.append('1');
+                oi++;
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder out = new StringBuilder();
+
+        int T = Integer.parseInt(br.readLine());
+
+        while (T-- > 0) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int n = Integer.parseInt(st.nextToken());
+            int k = Integer.parseInt(st.nextToken());
+
+            int z = n / 2;
+            int o = n - z;
+
+            String ans = build(n, z, o, k, true);
+            if (ans == null)
+                ans = build(n, z, o, k, false);
+
+            if (ans == null) out.append("-1\n");
+            else out.append(ans).append('\n');
+        }
+
+        System.out.print(out);
+    }
+}
