@@ -1,0 +1,36 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        long a = sc.nextLong(); // ties
+        long b = sc.nextLong(); // scarves
+        long c = sc.nextLong(); // vests
+        long d = sc.nextLong(); // jackets
+        long e = sc.nextLong(); // cost of first type
+        long f = sc.nextLong(); // cost of second type
+
+        long ans = 0;
+
+        if (e > f) {
+            // Make first type first
+            long first = Math.min(a, d);
+            ans += first * e;
+            d -= first;
+
+            long second = Math.min(Math.min(b, c), d);
+            ans += second * f;
+        } else {
+            // Make second type first
+            long second = Math.min(Math.min(b, c), d);
+            ans += second * f;
+            d -= second;
+
+            long first = Math.min(a, d);
+            ans += first * e;
+        }
+
+        System.out.println(ans);
+    }
+}
