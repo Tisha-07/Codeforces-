@@ -1,0 +1,56 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        int T = Integer.parseInt(br.readLine());
+
+        StringBuilder out = new StringBuilder();
+
+        while (T-- > 0) {
+            int n = Integer.parseInt(br.readLine());
+
+            int[] a = new int[n];
+            int[] b = new int[n];
+
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int onesA = 0;
+            for (int i = 0; i < n; i++) {
+                a[i] = Integer.parseInt(st.nextToken());
+                onesA += a[i];
+            }
+
+            st = new StringTokenizer(br.readLine());
+            int onesB = 0;
+            for (int i = 0; i < n; i++) {
+                b[i] = Integer.parseInt(st.nextToken());
+                onesB += b[i];
+            }
+
+            int mismatch = 0;
+            int onesMismatch = 0;
+
+            for (int i = 0; i < n; i++) {
+                if (a[i] != b[i]) {
+                    mismatch++;
+                    if (a[i] == 1) onesMismatch++;
+                }
+            }
+
+            // Check possibility
+            if ( (mismatch & 1) != ((onesA ^ onesB) & 1) ) {
+                out.append(-1).append('\n');
+            } else if (mismatch == 0) {
+                out.append(0).append('\n');
+            } else if ( (onesMismatch & 1) == 1 ) {
+                out.append(1).append('\n');
+            } else {
+                out.append(2).append('\n');
+            }
+        }
+
+        System.out.print(out);
+    }
+}
