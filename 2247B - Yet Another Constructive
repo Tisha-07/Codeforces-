@@ -1,0 +1,40 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder out = new StringBuilder();
+
+        int t = Integer.parseInt(br.readLine());
+
+        while (t-- > 0) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+
+            int n = Integer.parseInt(st.nextToken());
+            int k = Integer.parseInt(st.nextToken());
+            long m = Long.parseLong(st.nextToken());
+
+            if (k > m) {
+                out.append("NO\n");
+                continue;
+            }
+
+            out.append("YES\n");
+
+            // Special value: m - k + 1
+            long special = m - k + 1;
+
+            out.append(special);
+
+            for (int i = 1; i < n; i++) {
+                out.append(" 1");
+            }
+
+            out.append('\n');
+        }
+
+        System.out.print(out);
+    }
+}
