@@ -1,0 +1,62 @@
+import java.io.*;
+import java.util.*;
+
+public class Sol {
+    public static void main(String[] args) throws IOException {
+        DataInputStream in = new DataInputStream(new BufferedInputStream(System.in, 1 << 16));
+        int t = nextInt(in);
+        StringBuilder sb = new StringBuilder();
+        while (t-- > 0) {
+            int n = nextInt(in);
+            int[] a = new int[n];
+            for (int i = 0; i < n; i++) a[i] = nextInt(in);
+
+            // P1: prefix sum for part1 condition: +1 if ==1 else -1
+            int[] P1 = new int[n + 1];
+            for (int i = 0; i < n; i++) {
+                P1[i + 1] = P1[i] + (a[i] == 1 ? 1 : -1);
+            }
+
+            // S: prefix sum for part2 condition: +1 if in {1,2} else -1
+            int[] S = new int[n + 1];
+            for (int i = 0; i < n; i++) {
+                S[i + 1] = S[i] + ((a[i] == 1 || a[i] == 2) ? 1 : -1);
+            }
+
+            // suffixMax[p] = max(S[p..n-1])
+            int[] suffixMax = new int[n];
+            suffixMax[n - 1] = S[n - 1];
+            for (int p = n - 2; p >= 0; p--) {
+                suffixMax[p] = Math.max(S[p], suffixMax[p + 1]);
+            }
+
+            boolean ans = false;
+            for (int i = 1; i <= n - 2; i++) {
+                if (P1[i] >= 0) {
+                    if (suffixMax[i + 1] >= S[i]) {
+                        ans = true;
+                        break;
+                    }
+                }
+            }
+            sb.append(ans ? "YES\n" : "NO\n");
+        }
+        System.out.print(sb);
+    }
+
+    private static int nextInt(DataInputStream in) throws IOException {
+        int ret = 0;
+        int b = in.read();
+        while (b < '0' || b > '9') {
+            if (b == '-') break;
+            b = in.read();
+        }
+        boolean neg = false;
+        if (b == '-') { neg = true; b = in.read(); }
+        while (b >= '0' && b <= '9') {
+            ret = ret * 10 + (b - '0');
+            b = in.read();
+        }
+        return neg ? -ret : ret;
+    }
+}
