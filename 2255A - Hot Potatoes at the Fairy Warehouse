@@ -1,0 +1,51 @@
+import java.io.*;
+import java.util.*;
+
+public class Sol {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(br.readLine().trim());
+        StringBuilder sb = new StringBuilder();
+        while (t-- > 0) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int n = Integer.parseInt(st.nextToken());
+            long k = Long.parseLong(st.nextToken()); // k unused, but read it
+            String s = br.readLine().trim();
+            int L = 2 * n;
+
+            long totalEven = 0, totalOdd = 0;
+            for (int i = 0; i < L; i++) {
+                if (s.charAt(i) == '1') {
+                    int pos = i + 1; // 1-indexed
+                    if (pos % 2 == 0) totalEven++;
+                    else totalOdd++;
+                }
+            }
+
+            if (totalEven + totalOdd == 0) {
+                sb.append("0 0\n");
+                continue;
+            }
+
+            if (totalEven + totalOdd == L) {
+                // all 1s -> no movement ever possible
+                sb.append(totalEven).append(' ').append(totalOdd).append('\n');
+                continue;
+            }
+
+            long fEven = 0, fOdd = 0;
+            for (int i = 0; i < L; i++) {
+                if (s.charAt(i) == '1' && s.charAt((i + 1) % L) == '0') {
+                    int pos = i + 1;
+                    if (pos % 2 == 0) fEven++;
+                    else fOdd++;
+                }
+            }
+
+            long red = totalEven - fEven + fOdd;
+            long blue = totalOdd - fOdd + fEven;
+            sb.append(red).append(' ').append(blue).append('\n');
+        }
+        System.out.print(sb);
+    }
+}
