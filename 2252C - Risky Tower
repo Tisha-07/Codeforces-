@@ -1,0 +1,86 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder out = new StringBuilder();
+
+        int t = Integer.parseInt(br.readLine().trim());
+
+        while (t-- > 0) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+
+            int n = Integer.parseInt(st.nextToken());
+            int k = Integer.parseInt(st.nextToken());
+
+            // Special case: n = 1
+            if (n == 1) {
+                if (k == 1) {
+                    out.append("YES\n");
+                    out.append("0\n");
+                } else {
+                    out.append("NO\n");
+                }
+                continue;
+            }
+
+            // Required transformation
+            k ^= n;
+
+            // If k needs more bits than n-1 can provide, impossible
+            if (Integer.toBinaryString(k).length() >
+                Integer.toBinaryString(n - 1).length()) {
+
+                out.append("NO\n");
+                continue;
+            }
+
+            List<Integer> special = new ArrayList<>();
+
+            if (k > 0 && k <= n - 1) {
+                special.add(k);
+            } else if (k > 0) {
+                special.add(n - 1);
+                special.add((n - 1) ^ k);
+            }
+
+            // 0 is always added
+            special.add(0);
+
+            boolean[] used = new boolean[n];
+
+            for (int x : special) {
+                used[x] = true;
+            }
+
+            List<Integer> ans = new ArrayList<>();
+
+            // Add special elements first
+            ans.addAll(special);
+
+            // Add all remaining elements
+            for (int i = 0; i < n; i++) {
+                if (!used[i]) {
+                    ans.add(i);
+                }
+            }
+
+            // Reverse the complete permutation
+            Collections.reverse(ans);
+
+            out.append("YES\n");
+
+            for (int i = 0; i < n; i++) {
+                if (i > 0) {
+                    out.append(" ");
+                }
+                out.append(ans.get(i));
+            }
+            out.append("\n");
+        }
+
+        System.out.print(out);
+    }
+}
